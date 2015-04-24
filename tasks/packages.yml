@@ -1,0 +1,45 @@
+---
+- name: 'Fail if not using Apt or Yum.  Do a manual install for now :-('
+  fail: msg='This role only supports Yum or Apt package managers at the moment.  Please do a manual install instead.'
+    when: ansible_pkg_mgr != 'yum' and ansible_pkg_mgr != 'apt'
+
+- name: install common packages
+  apt:
+    name: '{{ item }}'
+    update_cache: True
+    cache_valid_time: 604800
+    force: True
+  with_items:
+    - gawk
+    - libsqlite3-dev
+    - sqlite3
+    - autoconf
+    - libgdbm-dev
+    - libncurses5-dev
+    - automake
+    - libtool
+    - bison
+    - libffi-dev
+    - expect
+  when: ansible_pkg_mgr == 'apt'
+
+- name: install common packages
+  yum:
+    name: '{{ item }}'
+  with_items:
+    - gcc-c++
+    - patch
+    - readline
+    - readline-devel
+    - zlib
+    - zlib-devel
+    - libyaml-devel
+    - libffi-devel
+    - openssl-devel
+    - make
+    - bzip2
+    - autoconf
+    - automake
+    - libtool
+    - bison
+    - iconv-devel
